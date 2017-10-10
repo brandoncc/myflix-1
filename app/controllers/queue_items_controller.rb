@@ -13,10 +13,14 @@ class QueueItemsController < ApplicationController
   end
 
   def update
-    ActiveRecord::Base.transaction do
-      params[:queue_items].each do |queue_item|
-        QueueItem.find(queue_item['id']).update(position: queue_item['position'])
+    begin
+      ActiveRecord::Base.transaction do
+        params[:queue_items].each do |queue_item|
+          QueueItem.find(queue_item['id']).update!(position: queue_item['position'])
+        end
       end
+    rescue ActiveRecord::RecordInvalid
+      flash["error"] = "Invalid position numbers."
     end
 
     redirect_to my_queue_path

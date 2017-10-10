@@ -129,39 +129,76 @@ RSpec.describe QueueItemsController, :type => :controller do
         session[:user_id] = user.id
       end
 
-      it "updates the position values based on the input positions" do
-        video1 = Fabricate(:video)
-        video2 = Fabricate(:video)
-        queue_item1 = Fabricate(:queue_item, video: video1, user: user, position: 1)
-        queue_item2 = Fabricate(:queue_item, video: video2, user: user, position: 2)
+      context "with valid input" do
+        it "redirects to my queue path" do
+          queue_item1 = Fabricate(:queue_item, user: user)
+          queue_item2 = Fabricate(:queue_item, user: user)
+          post :update, queue_items: [{id: queue_item1.id, position: 2}, {id: queue_item2.id, position: 1}]
+          expect(user.queue_items).to eq [queue_item2, queue_item1]
+        end
 
-        post :update, queue_items: [{id: queue_item1.id, position: 2}, {id: queue_item2.id, position: 1}]
-        expect(queue_item1.reload.position).to eq 2
-        expect(queue_item2.reload.position).to eq 1
+        it "reorders the queue items" do
+          queue_item1 = Fabricate(:queue_item, user: user)
+          queue_item2 = Fabricate(:queue_item, user: user)
+
+          post :update, queue_items: [{id: queue_item1.id, position: 2}, {id: queue_item2.id, position: 1}]
+          expect(user.queue_items).to eq [queue_item2, queue_item1]
+        end
+
+        it "normalizes the position numbers" do
+          queue_item1 = Fabricate(:queue_item, user: user)
+          queue_item2 = Fabricate(:queue_item, user: user)
+
+          post :update, queue_items: [{id: queue_item1.id, position: 2}, {id: queue_item2.id, position: 1}]
+          expect(user.queue_items.last).to eq queue_item1.reload
+        end
       end
 
-      it "positions queue items based on descending order of position values" do
-        video1 = Fabricate(:video)
-        video2 = Fabricate(:video)
-        queue_item1 = Fabricate(:queue_item, video: video1, user: user, position: 1)
-        queue_item2 = Fabricate(:queue_item, video: video2, user: user, position: 2)
+      context "with invalid input" do
+        it "redirects my queue path" do
+          queue_item1 = Fabricate(:queue_item, user: user)
+          queue_item2 = Fabricate(:queue_item, user: user)
 
-        post :update, queue_items: [{id: queue_item1.id, position: 2}, {id: queue_item2.id, position: 1}]
-        expect(user.queue_items.last).to eq queue_item1.reload
-      end
+          post :update, queue_items: [{id: queue_item1.id, position: 3}, {id: queue_item2.id, position: 2.5}]
 
-      it "does not reorder when any position value is not an integer" do
-        video1 = Fabricate(:video)
-        video2 = Fabricate(:video)
-        queue_item1 = Fabricate(:queue_item, video: video1, user: user, position: 1)
-        queue_item2 = Fabricate(:queue_item, video: video2, user: user, position: 2)
+          expect(response).to redirect_to my_queue_path
+        end
 
-        post :update, queue_items: [{id: queue_item1.id, position: 2.5}, {id: queue_item2.id, position: 1}]
-        expect(user.queue_items.reload.last).to eq queue_item2.reload
+        it "sets flash['error']" do
+          queue_item1 = Fabricate(:queue_item, user: user)
+          queue_item2 = Fabricate(:queue_item, user: user)
+
+          post :update, queue_items: [{id: queue_item1.id, position: 3}, {id: queue_item2.id, position: 2.5}]
+
+          expect(flash['error']).to be_present
+        end
+
+        it "does not reorder" do
+          queue_item1 = Fabricate(:queue_item, user: user)
+          queue_item2 = Fabricate(:queue_item, user: user)
+
+          post :update, queue_items: [{id: queue_item1.id, position: 3}, {id: queue_item2.id, position: 2.5}]
+
+          expect(user.queue_items.reload.last).to eq queue_item2
+        end
+
+        it "does not update valid input" do
+          queue_item1 = Fabricate(:queue_item, user: user)
+          queue_item2 = Fabricate(:queue_item, user: user)
+
+          post :update, queue_items: [{id: queue_item1.id, position: 2}, {id: queue_item2.id, position: 1.5}]
+
+          expect(user.queue_items.reload.first).to_not eq 2
+        end
       end
     end
 
     context "as a guest" do
+      it 'redirects to sign in page' do
+        post :update
+
+        expect(response).to redirect_to sign_in_path
+      end
     end
   end
 end

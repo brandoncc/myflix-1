@@ -16,8 +16,8 @@
                 %th(width="15%") Remove
             %tbody
               - @queue_items.each_with_index do |queue_item, i|
-                = hidden_field_tag "queue_items[][id]", queue_item.id
                 %tr
+                  = hidden_field_tag "queue_items[][id]", queue_item.id
                   %td
                     = text_field_tag "queue_items[][position]", i + 1, class: "form-control"
                   %td
