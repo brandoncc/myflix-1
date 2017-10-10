@@ -5,14 +5,10 @@ class QueueItem < ActiveRecord::Base
   delegate :category, to: :video
   delegate :title, to: :video, prefix: :video
 
-  def rating
-    review = user.reviews.find_by(video: video)
+  validates :position, numericality: { only_integer: true }
 
-    if review
-      review.rating
-    else
-      5
-    end
+  def rating
+    user.reviews.find_by(video: video).try(:rating)
   end
 
   def category_name

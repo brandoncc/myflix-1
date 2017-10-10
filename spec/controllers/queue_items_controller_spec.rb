@@ -121,4 +121,47 @@ RSpec.describe QueueItemsController, :type => :controller do
       end
     end
   end
+
+  describe "POST update" do
+    context "as an authorized user" do
+      let(:user) { Fabricate(:user) }
+      before do
+        session[:user_id] = user.id
+      end
+
+      it "updates the position values based on the input positions" do
+        video1 = Fabricate(:video)
+        video2 = Fabricate(:video)
+        queue_item1 = Fabricate(:queue_item, video: video1, user: user, position: 1)
+        queue_item2 = Fabricate(:queue_item, video: video2, user: user, position: 2)
+
+        post :update, queue_items: [{id: queue_item1.id, position: 2}, {id: queue_item2.id, position: 1}]
+        expect(queue_item1.reload.position).to eq 2
+        expect(queue_item2.reload.position).to eq 1
+      end
+
+      it "positions queue items based on descending order of position values" do
+        video1 = Fabricate(:video)
+        video2 = Fabricate(:video)
+        queue_item1 = Fabricate(:queue_item, video: video1, user: user, position: 1)
+        queue_item2 = Fabricate(:queue_item, video: video2, user: user, position: 2)
+
+        post :update, queue_items: [{id: queue_item1.id, position: 2}, {id: queue_item2.id, position: 1}]
+        expect(user.queue_items.last).to eq queue_item1.reload
+      end
+
+      it "does not reorder when any position value is not an integer" do
+        video1 = Fabricate(:video)
+        video2 = Fabricate(:video)
+        queue_item1 = Fabricate(:queue_item, video: video1, user: user, position: 1)
+        queue_item2 = Fabricate(:queue_item, video: video2, user: user, position: 2)
+
+        post :update, queue_items: [{id: queue_item1.id, position: 2.5}, {id: queue_item2.id, position: 1}]
+        expect(user.queue_items.reload.last).to eq queue_item2.reload
+      end
+    end
+
+    context "as a guest" do
+    end
+  end
 end

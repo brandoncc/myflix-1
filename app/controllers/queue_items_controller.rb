@@ -12,6 +12,16 @@ class QueueItemsController < ApplicationController
     redirect_to my_queue_path
   end
 
+  def update
+    ActiveRecord::Base.transaction do
+      params[:queue_items].each do |queue_item|
+        QueueItem.find(queue_item['id']).update(position: queue_item['position'])
+      end
+    end
+
+    redirect_to my_queue_path
+  end
+
   def destroy
     queue_item = QueueItem.find(params[:id])
     if queue_item.user == current_user
