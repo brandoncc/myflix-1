@@ -14,4 +14,16 @@ class QueueItem < ActiveRecord::Base
   def category_name
     video.category.name
   end
+
+  def update_rating(to_rating)
+    if rating.nil?
+      review = user.reviews.new(video: video, user: user, rating: to_rating)
+      review.skip_content_validation = true
+      review.save
+    else
+      review = Review.find_by(video: video, user: user)
+      review.skip_content_validation = true
+      review.update(rating: to_rating)
+    end
+  end
 end

@@ -190,6 +190,15 @@ RSpec.describe QueueItemsController, :type => :controller do
 
           expect(user.queue_items.reload.first).to_not eq 2
         end
+
+        it "updates rating" do
+          video = Fabricate(:video)
+          queue_item = Fabricate(:queue_item, user: user, video: video)
+          review = Fabricate(:review, user: user, video: video)
+
+          post :update, queue_items: [{id: queue_item.id, position: 2.5, rating: 5}]
+          expect(user.queue_items.first.rating).to eq 5
+        end
       end
     end
 

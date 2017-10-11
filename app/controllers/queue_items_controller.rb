@@ -13,12 +13,9 @@ class QueueItemsController < ApplicationController
   end
 
   def update
+    update_queue_item_ratings
     begin
-      ActiveRecord::Base.transaction do
-        params[:queue_items].each do |queue_item|
-          QueueItem.find(queue_item['id']).update!(position: queue_item['position'])
-        end
-      end
+      update_queue_positions
     rescue ActiveRecord::RecordInvalid
       flash["error"] = "Invalid position numbers."
     end
@@ -45,5 +42,21 @@ class QueueItemsController < ApplicationController
 
   def queue_item_not_exists?(video)
     !current_user.queue_items.find_by video: video
+  end
+
+  def update_queue_positions
+    ActiveRecord::Base.transaction do
+      params[:queue_items].each do |queue_item|
+        QueueItem.find(queue_item['id']).update!(position: queue_item['position'])
+      end
+    end
+  end
+
+  def update_queue_item_ratings
+    params[:queue_items].each do |queue_item|
+      rating = queue_item['rating']
+      queue_item = QueueItem.find(queue_item['id'])
+      queue_item.update_rating(rating)
+    end
   end
 end
