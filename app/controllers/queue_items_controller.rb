@@ -56,7 +56,7 @@ class QueueItemsController < ApplicationController
     params[:queue_items].each do |queue_item|
       rating = queue_item['rating']
       queue_item = QueueItem.find(queue_item['id'])
-      queue_item.update_rating(rating)
+      queue_item.rating = rating
     end
   end
 end

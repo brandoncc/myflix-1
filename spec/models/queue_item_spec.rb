@@ -49,24 +49,30 @@ RSpec.describe QueueItem, :type => :model do
   end
 
   describe "#update_rating" do
-    context "user has no review on the video of the queue item" do
+    let(:user) { Fabricate(:user) }
+    let(:video) { Fabricate(:video) }
+    let(:queue_item) { Fabricate(:queue_item, user: user, video: video) }
+
+    context "review is not present" do
       it "creates a new review" do
-        user = Fabricate(:user)
-        video = Fabricate(:video)
-        queue_item = Fabricate(:queue_item, user: user, video: video)
-        queue_item.update_rating(5)
+        queue_item.rating = 5
         expect(Review.count).to eq 1
       end
     end
 
-    context "user has reviewed on the video of the queue item" do
-      it "creates a new review" do
-        user = Fabricate(:user)
-        video = Fabricate(:video)
-        queue_item = Fabricate(:queue_item, user: user, video: video)
-        review = Fabricate(:review, user: user, video: video)
-        queue_item.update_rating(5)
-        expect(review.reload.rating).to eq 5
+    context "review is present" do
+      before do
+        @review = Fabricate(:review, user: user, video: video)
+      end
+
+      it "changes the rating of the review" do
+        queue_item.rating = 5
+        expect(@review.reload.rating).to eq 5
+      end
+
+      it "clears the rating of the review" do
+        queue_item.rating = nil
+        expect(@review.reload.rating).to be_nil
       end
     end
   end
