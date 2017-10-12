@@ -5,7 +5,7 @@ RSpec.describe QueueItemsController, :type => :controller do
     context "as an authorized user" do
       let(:user) { Fabricate(:user) }
       before do
-        session[:user_id] = user.id
+        set_current_user(user)
       end
 
       it "sets @queue_items" do
@@ -17,9 +17,8 @@ RSpec.describe QueueItemsController, :type => :controller do
     end
 
     context "as a guest" do
-      it "redirects to home page" do
-        get :index
-        expect(response).to redirect_to sign_in_path
+      it_behaves_like "requires sign in" do
+        let(:action) { get :index }
       end
     end
   end
@@ -29,7 +28,7 @@ RSpec.describe QueueItemsController, :type => :controller do
       let(:user) { Fabricate(:user) }
       let(:video) { Fabricate(:video) }
       before do
-        session[:user_id] = user.id
+        set_current_user(user)
       end
 
       it "redirects to my queue page" do
@@ -68,10 +67,8 @@ RSpec.describe QueueItemsController, :type => :controller do
     end
 
     context "as a guest" do
-      it "redirects to sign in path" do
-        video = Fabricate(:video)
-        post :create, video_id: video.id
-        expect(response).to redirect_to sign_in_path
+      it_behaves_like "requires sign in" do
+        let(:action) { post :create, video_id: Fabricate(:video).id }
       end
     end
   end
@@ -83,7 +80,7 @@ RSpec.describe QueueItemsController, :type => :controller do
       let(:queue_item) { Fabricate(:queue_item, user: user, video: video) }
 
       before do
-        session[:user_id] = user.id
+        set_current_user(user)
       end
 
       it "redirects to my queue" do
@@ -105,12 +102,11 @@ RSpec.describe QueueItemsController, :type => :controller do
     end
 
     context "as a guest" do
-      it "redirects to sign in path" do
-        user = Fabricate(:user)
-        video = Fabricate(:video)
-        queue_item = Fabricate(:queue_item, user: user, video: video)
-        delete :destroy, id: queue_item.id
-        expect(response).to redirect_to sign_in_path
+      it_behaves_like "requires sign in" do
+        let(:action) do
+          queue_item = Fabricate(:queue_item, user: Fabricate(:user), video: Fabricate(:video))
+          delete :destroy, id: queue_item.id
+        end
       end
     end
   end
@@ -122,7 +118,7 @@ RSpec.describe QueueItemsController, :type => :controller do
       let(:queue_item2) { Fabricate(:queue_item, user: user) }
 
       before do
-        session[:user_id] = user.id
+        set_current_user(user)
       end
 
       context "with valid input" do
@@ -175,9 +171,8 @@ RSpec.describe QueueItemsController, :type => :controller do
     end
 
     context "as a guest" do
-      it 'redirects to sign in page' do
-        post :update
-        expect(response).to redirect_to sign_in_path
+      it_behaves_like "requires sign in" do
+        let(:action) { post :update }
       end
     end
   end

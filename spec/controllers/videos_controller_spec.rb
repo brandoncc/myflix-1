@@ -3,8 +3,9 @@ require 'spec_helper'
 RSpec.describe VideosController, :type => :controller do
   describe "#show" do
     context "as authorized user" do
+      let(:user) { Fabricate(:user) }
       before do
-        session[:user_id] = Fabricate(:user)
+        set_current_user(user)
       end
 
       it "sets @video" do
@@ -24,18 +25,17 @@ RSpec.describe VideosController, :type => :controller do
     end
 
     context "as a guest" do
-      it "redirect to sign in path" do
-        video = Fabricate(:video)
-        get :show, id: video.id
-        expect(response).to redirect_to sign_in_path
+      it_behaves_like "requires sign in" do
+        let(:action) { get :show, id: Fabricate(:video).id }
       end
     end
   end
 
   describe "#search" do
     context "as authorized user" do
+      let(:user) { Fabricate(:user) }
       before do
-        session[:user_id] = Fabricate(:user)
+        set_current_user(user)
       end
 
       it "responses successfully" do
@@ -45,9 +45,8 @@ RSpec.describe VideosController, :type => :controller do
     end
 
     context "as a guest" do
-      it "redirects to sign in" do
-        get :search
-        expect(response).to redirect_to sign_in_path
+      it_behaves_like "requires sign in" do
+        let(:action) { get :search }
       end
     end
   end
