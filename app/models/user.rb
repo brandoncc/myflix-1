@@ -6,4 +6,8 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email
 
   has_secure_password
+
+  def queued_item?(video)
+    !!QueueItem.find_by(user: self, video: video)
+  end
 end
