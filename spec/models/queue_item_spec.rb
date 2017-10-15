@@ -55,24 +55,22 @@ RSpec.describe QueueItem, :type => :model do
 
     context "review is not present" do
       it "creates a new review" do
-        queue_item.rating = 5
-        expect(Review.count).to eq 1
+
+        expect { queue_item.rating = 5 }.to change { Review.count }.by(1)
       end
     end
 
     context "review is present" do
-      before do
-        @review = Fabricate(:review, user: user, video: video)
-      end
+      let!(:review) { Fabricate(:review, user: user, video: video) }
 
       it "changes the rating of the review" do
         queue_item.rating = 5
-        expect(@review.reload.rating).to eq 5
+        expect(review.reload.rating).to eq 5
       end
 
       it "clears the rating of the review" do
         queue_item.rating = nil
-        expect(@review.reload.rating).to be_nil
+        expect(review.reload.rating).to be_nil
       end
     end
   end

@@ -168,6 +168,14 @@ RSpec.describe QueueItemsController, :type => :controller do
           expect(user.queue_items.first.rating).to eq 5
         end
       end
+
+      it 'does not update queue item of other users' do
+        other_user = Fabricate(:user)
+        set_current_user(other_user)
+
+        post :update, queue_items: [{id: queue_item1.id, position: 3}, {id: queue_item2.id, position: 2}]
+        expect(user.queue_items.reload.last).to eq queue_item2
+      end
     end
 
     context "as a guest" do

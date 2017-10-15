@@ -8,6 +8,7 @@ class QueueItemsController < ApplicationController
   def create
     video = Video.find(params[:video_id])
     create_queue_item(video)
+    flash[:notice] = "Your list is queued up!"
 
     redirect_to my_queue_path
   end
@@ -47,7 +48,11 @@ class QueueItemsController < ApplicationController
   def update_queue_positions
     ActiveRecord::Base.transaction do
       params[:queue_items].each do |queue_item|
-        QueueItem.find(queue_item['id']).update!(position: queue_item['position'])
+        id = queue_item['id']
+        position = queue_item['position']
+        queue_item = QueueItem.find(id)
+
+        queue_item.update!(position: position) if current_user == queue_item.user
       end
     end
   end
