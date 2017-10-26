@@ -17,13 +17,13 @@ RSpec.describe SessionsController, :type => :controller do
 
   describe "Post #create" do
     context "with valid credentials" do
+      let(:user) { Fabricate(:user) }
       before do
-        @user = Fabricate(:user)
-        post :create, email: @user.email, password: @user.password
+        post :create, email: user.email, password: user.password
       end
 
       it "puts the :user_id in session" do
-        expect(session[:user_id]).to eq @user.id
+        expect(session[:user_id]).to eq user.id
       end
 
       it "redirects to home path" do
@@ -36,9 +36,9 @@ RSpec.describe SessionsController, :type => :controller do
     end
 
     context "with invalid credentials" do
+      let(:user) { Fabricate(:user) }
       before do
-        @user = Fabricate(:user)
-        post :create, email: @user.email, password: Faker::Lorem.characters(11)
+        post :create, email: user.email, password: Faker::Lorem.characters(11)
       end
 
       it "does not put the :user_id in session" do
@@ -56,8 +56,9 @@ RSpec.describe SessionsController, :type => :controller do
   end
 
   describe "GET #destroy" do
+    let(:user) { Fabricate(:user) }
     before do
-      session[:user_id] = Fabricate(:user).id
+      set_current_user(user)
       get :destroy
     end
 

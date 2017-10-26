@@ -8,6 +8,18 @@ class QueueItemsController < ApplicationController
   def create
     video = Video.find(params[:video_id])
     create_queue_item(video)
+    flash[:notice] = "Your list is queued up!"
+
+    redirect_to my_queue_path
+  end
+
+  def update
+    update_queue_item_ratings
+    begin
+      update_queue_positions
+    rescue ActiveRecord::RecordInvalid
+      flash["error"] = "Invalid position numbers."
+    end
 
     redirect_to my_queue_path
   end
@@ -31,5 +43,25 @@ class QueueItemsController < ApplicationController
 
   def queue_item_not_exists?(video)
     !current_user.queue_items.find_by video: video
+  end
+
+  def update_queue_positions
+    ActiveRecord::Base.transaction do
+      params[:queue_items].each do |queue_item|
+        id = queue_item['id']
+        position = queue_item['position']
+        queue_item = QueueItem.find(id)
+
+        queue_item.update!(position: position) if current_user == queue_item.user
+      end
+    end
+  end
+
+  def update_queue_item_ratings
+    params[:queue_items].each do |queue_item|
+      rating = queue_item['rating']
+      queue_item = QueueItem.find(queue_item['id'])
+      queue_item.rating = rating
+    end
   end
 end
