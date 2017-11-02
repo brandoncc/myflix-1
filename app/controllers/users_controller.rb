@@ -7,6 +7,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find_by(id: params[:id])
+    @relationship = Relationship.find_by(follower:current_user, leader: @user)
   end
 
   def create

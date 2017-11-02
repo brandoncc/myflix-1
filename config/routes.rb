@@ -15,7 +15,7 @@ Myflix::Application.routes.draw do
   resources :queue_items, only: [:create, :destroy]
 
   get '/people', to: 'relationships#index'
-  resources :relationships, only: [:destroy]
+  resources :relationships, only: [:create, :destroy]
 
   resources :videos, only: [:show] do
     collection do

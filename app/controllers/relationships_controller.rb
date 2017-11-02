@@ -5,8 +5,17 @@ class RelationshipsController < ApplicationController
     @leaders = current_user.leaders
   end
 
+  def create
+    if current_user != User.find(params[:leader_id])
+      Relationship.create(leader_id: params[:leader_id], follower: current_user)
+    end
+
+    redirect_to user_path(params[:leader_id])
+  end
+
   def destroy
-    Relationship.destroy(params[:id]) if Relationship.find(params[:id]).follower == current_user
+    relationship = Relationship.find(params[:id])
+    relationship.destroy if relationship.follower == current_user
     redirect_to people_path
   end
 end

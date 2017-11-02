@@ -20,6 +20,38 @@ Rspec.describe RelationshipsController do
     end
   end
 
+  describe "POST create" do
+    let(:user) { Fabricate(:user) }
+    let(:other_user) { Fabricate(:user) }
+
+    context "as an authorized user" do
+      before do
+        set_current_user(user)
+      end
+
+      it "creates a relationship" do
+        post :create, leader_id: other_user.id
+        expect(Relationship.count).to eq 1
+      end
+
+      it "redirects to user path" do
+        post :create, leader_id: other_user.id
+        expect(response).to redirect_to user_path(other_user.id)
+      end
+
+      it "does not follow current user herself" do
+        post :create, leader_id: user.id
+        expect(Relationship.count).to eq 0
+      end
+
+      it "does not create the same relationship again" do
+        relationship = Fabricate(:relationship, follower:user, leader: other_user)
+        post :create, leader_id: other_user.id
+        expect(Relationship.count).to eq 1
+      end
+    end
+  end
+
   describe "DELETE destroy" do
     let(:user) { Fabricate(:user) }
     let(:other_user) { Fabricate(:user) }
