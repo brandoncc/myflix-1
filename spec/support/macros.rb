@@ -1,5 +1,5 @@
-def set_current_user(user)
-  session[:user_id] = user.id
+def set_current_user(user=nil)
+  session[:user_id] = user.nil? ? Fabricate(:user).id : user.id
 end
 
 def sign_in(user=nil)

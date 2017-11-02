@@ -7,12 +7,15 @@ Myflix::Application.routes.draw do
   get '/sign_out', to: 'sessions#destroy'
   get '/home', to: 'videos#index'
 
+  resources :users, only: [:create, :show]
+  resources :categorys, only: [:show]
+
   get '/my_queue', to: 'queue_items#index'
   post '/my_queue/update', to: 'queue_items#update'
-
-  resources :users, only: [:create]
-  resources :categorys, only: [:show]
   resources :queue_items, only: [:create, :destroy]
+
+  get '/people', to: 'relationships#index'
+  resources :relationships, only: [:destroy]
 
   resources :videos, only: [:show] do
     collection do

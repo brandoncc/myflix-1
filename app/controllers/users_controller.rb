@@ -1,6 +1,12 @@
 class UsersController < ApplicationController
+  before_action :require_user, only: [:show]
+
   def new
     @user = User.new
+  end
+
+  def show
+    @user = User.find_by(id: params[:id])
   end
 
   def create
@@ -11,6 +17,10 @@ class UsersController < ApplicationController
     else
       render :new
     end
+  end
+
+  def leaders_page
+    @users = User.leaders
   end
 
   private

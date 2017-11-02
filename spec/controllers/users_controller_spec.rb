@@ -8,6 +8,27 @@ RSpec.describe UsersController, :type => :controller do
     end
   end
 
+  describe "GET show" do
+    let(:user) { Fabricate(:user) }
+
+    context "as an authorized user" do
+      before do
+        session[:user_id] = user.id
+      end
+
+      it "responses successfully" do
+        get :show, id: user.id
+        expect(response).to be_success
+      end
+    end
+
+    context "as a guest" do
+      it_behaves_like 'requires sign in' do
+        let(:action) {get :show, id: user.id}
+      end
+    end
+  end
+
   describe "POST create" do
     context "with valid input" do
       before do
