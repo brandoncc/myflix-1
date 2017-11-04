@@ -39,10 +39,6 @@ feature "User interacts with queue" do
   end
 end
 
-def click_video(video)
-  find("a[href='/videos/#{video.id}']").click
-end
-
 def set_position(video, pos)
   find_position_input(video).set(pos)
 end
