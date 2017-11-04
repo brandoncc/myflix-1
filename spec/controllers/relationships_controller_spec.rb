@@ -34,9 +34,9 @@ Rspec.describe RelationshipsController do
         expect(Relationship.count).to eq 1
       end
 
-      it "redirects to user path" do
+      it "redirects to people path" do
         post :create, leader_id: other_user.id
-        expect(response).to redirect_to user_path(other_user.id)
+        expect(response).to redirect_to people_path
       end
 
       it "does not follow current user herself" do

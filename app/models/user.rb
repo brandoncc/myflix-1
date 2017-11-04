@@ -15,4 +15,8 @@ class User < ActiveRecord::Base
   def queued_item?(video)
     !!QueueItem.find_by(user: self, video: video)
   end
+
+  def can_follow?(another_user)
+    self != another_user && !following_relationships.map(&:leader).include?(another_user)
+  end
 end
