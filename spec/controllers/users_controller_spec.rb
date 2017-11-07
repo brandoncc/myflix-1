@@ -59,5 +59,31 @@ RSpec.describe UsersController, :type => :controller do
         expect(assigns(:user)).to be_instance_of(User)
       end
     end
+
+    context "sending email" do
+      context "with valid input" do
+        after do
+          ActionMailer::Base.deliveries.clear
+        end
+
+        it "sends email" do
+          user_attributes = Fabricate.attributes_for(:user)
+          post :create, user: user_attributes
+          expect(ActionMailer::Base.deliveries.last.to).to eq [user_attributes[:email]]
+          expect(ActionMailer::Base.deliveries.last.body).to include user_attributes[:full_name]
+        end
+      end
+
+      context "with invalid input" do
+        after do
+          ActionMailer::Base.deliveries.clear
+        end
+
+        it "does not send email" do
+          post :create, user: Fabricate.attributes_for(:user, full_name: nil)
+          expect(ActionMailer::Base.deliveries).to be_empty
+        end
+      end
+    end
   end
 end
