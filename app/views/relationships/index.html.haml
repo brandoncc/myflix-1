@@ -17,6 +17,4 @@
           %td.extra-padding= leader.queue_items.count
           %td.extra-padding= leader.followers.count
           %td.extra-padding
-            - relationship = Relationship.find_by(leader: leader, follower: current_user)
-            = link_to relationship, method: :delete do
-              %i.glyphicon.glyphicon-remove
+            = render "unfollow_relationship", leader: leader

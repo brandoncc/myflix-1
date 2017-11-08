@@ -8,7 +8,7 @@ Myflix::Application.routes.draw do
   get '/home', to: 'videos#index'
 
   resources :users, only: [:create, :show]
-  resources :categorys, only: [:show]
+  resources :categories, only: [:show]
 
   get '/my_queue', to: 'queue_items#index'
   post '/my_queue/update', to: 'queue_items#update'

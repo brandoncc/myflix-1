@@ -13,3 +13,11 @@ end
 def click_video(video)
   find("a[href='/videos/#{video.id}']").click
 end
+
+def expect_page_to_have(content)
+  expect(page).to have_content content
+end
+
+def expect_page_to_not_have(content)
+  expect(page).to have_no_content content
+end

@@ -11,18 +11,18 @@ feature "User follows a user and unfollow" do
 
     click_video(video)
     click_link(user2.full_name)
-    expect(page).to have_content "#{user2.full_name}'s video collections"
+    expect_page_to_have("#{user2.full_name}'s video collections")
 
     click_link "Follow"
-    expect(page).to have_content "People I Follow"
-    expect(page).to have_content user2.full_name
+    expect_page_to_have("People I Follow")
+    expect_page_to_have(user2.full_name)
 
     visit user_path(user2)
-    expect(page).to have_no_content 'Follow'
+    expect_page_to_not_have('Follow')
 
     visit people_path
     click_unfollow(Relationship.first)
-    expect(page).to have_no_content user2.full_name
+    expect_page_to_not_have(user2.full_name)
   end
 end
 

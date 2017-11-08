@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-Rspec.describe RelationshipsController do
+describe RelationshipsController do
   describe "GET index" do
     context "as an authorized user" do
       it "sets @relationships to the current user's following relationship" do
@@ -48,6 +48,12 @@ Rspec.describe RelationshipsController do
         relationship = Fabricate(:relationship, follower:user, leader: other_user)
         post :create, leader_id: other_user.id
         expect(Relationship.count).to eq 1
+      end
+    end
+
+    context "as a guest" do
+      it_behaves_like "requires sign in" do
+        let(:action) { post :create, leader_id: 1 }
       end
     end
   end

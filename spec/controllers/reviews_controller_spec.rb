@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe ReviewsController, :type => :controller do
+describe ReviewsController, :type => :controller do
   describe "POST create" do
     context "with authorized user" do
       let(:user) { Fabricate(:user) }

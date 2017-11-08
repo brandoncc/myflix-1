@@ -14,10 +14,10 @@ feature "User interacts with queue" do
     expect(page).to have_content monk.title
 
     click_link "+ My Queue"
-    expect(page).to have_content "Your list is queued up!"
+    expect_page_to_have "Your list is queued up!"
 
     visit video_path(monk)
-    expect(page).to_not have_content "+ My Queue"
+    expect_page_to_not_have "+ My Queue"
 
     visit home_path
     click_video(south_park)

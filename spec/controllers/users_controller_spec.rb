@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe UsersController, :type => :controller do
+describe UsersController, :type => :controller do
   describe "GET new" do
     it "returns an instance of User" do
       get :new

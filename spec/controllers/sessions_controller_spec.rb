@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe SessionsController, :type => :controller do
+describe SessionsController, :type => :controller do
   describe "#new" do
     it "redirects to home path if logged in" do
       user = Fabricate(:user)
