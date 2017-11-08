@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Category, :type => :model do
+describe Category, :type => :model do
   it { should have_many(:videos) }
 
   describe 'recent_videos' do

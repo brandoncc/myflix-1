@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe VideosController, :type => :controller do
+describe VideosController, :type => :controller do
   describe "#show" do
     context "as authorized user" do
       let(:user) { Fabricate(:user) }

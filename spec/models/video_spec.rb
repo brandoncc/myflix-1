@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Video, :type => :model do
+describe Video, :type => :model do
   it { should belong_to(:category) }
   it { should have_many(:reviews).order("created_at DESC")}
   it { should validate_presence_of(:title) }

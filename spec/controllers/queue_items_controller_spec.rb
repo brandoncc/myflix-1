@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe QueueItemsController, :type => :controller do
+describe QueueItemsController, :type => :controller do
   describe "GET index" do
     context "as an authorized user" do
       let(:user) { Fabricate(:user) }

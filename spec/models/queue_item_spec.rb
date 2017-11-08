@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe QueueItem, :type => :model do
+describe QueueItem, :type => :model do
   it { should belong_to :user}
   it { should belong_to :video}
   it { should validate_numericality_of(:position).only_integer}
