@@ -38,7 +38,7 @@ describe PasswordResetsController do
       end
 
       it "sets the success flash message" do
-        expect(flash[:success]).to be_present
+        expect(flash[:notice]).to be_present
       end
     end
 

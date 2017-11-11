@@ -13,7 +13,7 @@ class PasswordResetsController < ApplicationController
     user.password = params[:password]
 
     if user.save
-      flash[:success] = "Your password is reseted successfully!"
+      flash[:notice] = "Your password is reseted successfully!"
       redirect_to sign_in_path
     else
       flash.now[:error] = "Invalid password!"

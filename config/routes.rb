@@ -1,12 +1,12 @@
 Myflix::Application.routes.draw do
   root to: 'pages#front'
 
-  get '/register', to: 'users#new'
   get '/sign_in', to: 'sessions#new'
   post '/sign_in', to: 'sessions#create'
   get '/sign_out', to: 'sessions#destroy'
   get '/home', to: 'videos#index'
 
+  get '/register', to: 'users#new'
   resources :users, only: [:create, :show]
   resources :categories, only: [:show]
 
@@ -31,6 +31,9 @@ Myflix::Application.routes.draw do
 
   get "expired_token", to: "password_resets#expired_token"
   resources :password_resets, only: [:show, :create]
+
+  get "invite_user", to: "invite_users#new"
+  resources :invite_users, only: [:create]
 
   get 'ui(/:action)', controller: 'ui'
 end

@@ -2,7 +2,8 @@ class UsersController < ApplicationController
   before_action :require_user, only: [:show]
 
   def new
-    @user = User.new
+    queries = request.query_parameters
+    @user = User.new(email: queries[:email], invitor_token: queries[:invitor])
   end
 
   def show
@@ -15,6 +16,7 @@ class UsersController < ApplicationController
 
     if @user.save
       MyMailer.register_success_mail(@user).deliver
+      follow_each_other if @user.invitor_token
       redirect_to sign_in_path
     else
       render :new
@@ -23,7 +25,13 @@ class UsersController < ApplicationController
 
   private
 
+  def follow_each_other
+    invitor_id = User.find_by(token: @user.invitor_token).id
+    Relationship.create(leader_id: invitor_id, follower_id: @user.id)
+    Relationship.create(leader_id: @user.id, follower_id: invitor_id)
+  end
+
   def user_params
-    params.require(:user).permit(:email, :password, :full_name)
+    params.require(:user).permit(:email, :password, :full_name, :invitor_token)
   end
 end

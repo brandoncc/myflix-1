@@ -1,0 +1,8 @@
+!!! 5
+%html(lang="en-US")
+  %head
+    %meta(charset="UTF-8")
+  %body
+    %p= "Hi #{@invitation[:name]}"
+    %p= @invitation[:message]
+    = link_to "Link to registering on myflix", register_url(invitor: @invitation[:invitor], email: @invitation[:email])
