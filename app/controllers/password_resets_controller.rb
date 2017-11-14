@@ -17,7 +17,7 @@ class PasswordResetsController < ApplicationController
       redirect_to sign_in_path
     else
       flash.now[:error] = "Invalid password!"
-      render :expired_token
+      redirect_to expired_token_path
     end
   end
 end

@@ -49,7 +49,7 @@ describe PasswordResetsController do
       end
 
       it "renders password reset page" do
-        expect(response).to render_template :expired_token
+        expect(response).to redirect_to expired_token_path
       end
 
       it "sets the error flash message" do

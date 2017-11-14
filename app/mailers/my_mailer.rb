@@ -11,6 +11,6 @@ class MyMailer < ActionMailer::Base
 
   def send_invitation_mail(invitation)
     @invitation = invitation
-    mail(to: invitation[:email], subject: "Friend invitation!", from: "walter@gmail.com")
+    mail(to: invitation[:recipient_email], subject: "An invitation to myflix!", from: "walter@gmail.com")
   end
 end

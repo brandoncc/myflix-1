@@ -23,4 +23,13 @@ describe User do
       expect(user.queued_item?(video)).to be_falsey
     end
   end
+
+  describe "#follow" do
+    it "makes one user follow another user" do
+      user1 = Fabricate(:user)
+      user2 = Fabricate(:user)
+      user1.follow(user2)
+      expect(user1.leaders.first).to eq user2
+    end
+  end
 end

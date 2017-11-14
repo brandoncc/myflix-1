@@ -2,8 +2,19 @@ class UsersController < ApplicationController
   before_action :require_user, only: [:show]
 
   def new
-    queries = request.query_parameters
-    @user = User.new(email: queries[:email], invitor_token: queries[:invitor])
+    @user = User.new
+  end
+
+  def new_with_token
+    invitation = Invitation.find_by(token: params[:token])
+
+    if invitation
+      @user = User.new(email: invitation.recipient_email)
+      @invitation_token = invitation.token
+      render :new
+    else
+      redirect_to expired_token_path
+    end
   end
 
   def show
@@ -16,7 +27,7 @@ class UsersController < ApplicationController
 
     if @user.save
       MyMailer.register_success_mail(@user).deliver
-      follow_each_other if @user.invitor_token
+      handle_invitation
       redirect_to sign_in_path
     else
       render :new
@@ -25,13 +36,16 @@ class UsersController < ApplicationController
 
   private
 
-  def follow_each_other
-    invitor_id = User.find_by(token: @user.invitor_token).id
-    Relationship.create(leader_id: invitor_id, follower_id: @user.id)
-    Relationship.create(leader_id: @user.id, follower_id: invitor_id)
+  def handle_invitation
+    if params[:invitation_token]
+      invitation = Invitation.find_by(token: params[:invitation_token])
+      invitation.inviter.follow(@user)
+      @user.follow(invitation.inviter)
+      invitation.update_column(:token, nil)
+    end
   end
 
   def user_params
-    params.require(:user).permit(:email, :password, :full_name, :invitor_token)
+    params.require(:user).permit(:email, :password, :full_name)
   end
 end

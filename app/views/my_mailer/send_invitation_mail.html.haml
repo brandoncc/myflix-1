@@ -3,6 +3,7 @@
   %head
     %meta(charset="UTF-8")
   %body
-    %p= "Hi #{@invitation[:name]}"
+    %p Hi #{@invitation[:recipient_name]}
+    %p you are invited by #{@invitation.inviter.full_name}
     %p= @invitation[:message]
-    = link_to "Link to registering on myflix", register_url(invitor: @invitation[:invitor], email: @invitation[:email])
+    = link_to "Link to registering on myflix", register_with_token_url(@invitation.token)
