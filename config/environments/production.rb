@@ -26,5 +26,7 @@ Myflix::Application.configure do
     :domain         => 'walterflix.heroku.com',
     :authentication => :plain,
   }
+
+  config.action_mailer.default_url_options = { :host => "walterflix.heroku.com" }
   config.action_mailer.delivery_method = :smtp
 end
