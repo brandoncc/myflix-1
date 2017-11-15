@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include Tokenable
+
   has_many :reviews, -> { order("created_at DESC")}
   has_many :queue_items, -> { order("position") }
 
@@ -13,8 +15,6 @@ class User < ActiveRecord::Base
 
   has_secure_password
 
-  before_create :set_token
-
   def to_param
     token
   end
@@ -25,10 +25,6 @@ class User < ActiveRecord::Base
 
   def can_follow?(another_user)
     self != another_user && !following_relationships.map(&:leader).include?(another_user)
-  end
-
-  def set_token
-    self.token = SecureRandom.urlsafe_base64
   end
 
   def follow(user)

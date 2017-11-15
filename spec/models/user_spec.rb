@@ -9,6 +9,10 @@ describe User do
   it { should have_many(:reviews).order("created_at DESC")}
   it { should ensure_length_of(:password).is_at_least(8) }
 
+  it_behaves_like "tokenable" do
+    let(:object) { Fabricate(:user) }
+  end
+
   describe "#queued_item?" do
     it 'returns true when the video is queued' do
       user = Fabricate(:user)

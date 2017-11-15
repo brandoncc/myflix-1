@@ -37,7 +37,7 @@ describe UsersController, :type => :controller do
 
     context "as a guest" do
       it_behaves_like 'requires sign in' do
-        let(:action) {get :show, id: user.id}
+        let(:action) { get :show, id: user.id }
       end
     end
   end
