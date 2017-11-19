@@ -13,6 +13,7 @@ gem 'bootstrap_form'
 gem 'bcrypt-ruby', '3.1.2'
 gem 'sidekiq', '4.2'
 gem 'unicorn'
+gem "sentry-raven"
 
 group :development do
   gem 'thin'
