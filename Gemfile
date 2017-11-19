@@ -12,6 +12,7 @@ gem 'pg'
 gem 'bootstrap_form'
 gem 'bcrypt-ruby', '3.1.2'
 gem 'sidekiq', '4.2'
+gem 'unicorn'
 
 group :development do
   gem 'thin'
@@ -39,6 +40,5 @@ end
 
 group :production do
   gem 'rails_12factor'
-  gem 'unicorn'
 end
 
