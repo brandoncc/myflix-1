@@ -4,7 +4,7 @@ class ForgotPasswordsController < ApplicationController
 
     if user
       user.update_column("reset_token", SecureRandom.urlsafe_base64)
-      MyMailer.send_password_reset(user).deliver
+      MyMailer.delay.send_password_reset(user)
       redirect_to confirm_reset_path
     else
       flash[:error] = "Sorry. Invalid email."

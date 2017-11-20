@@ -34,11 +34,11 @@ describe PasswordResetsController do
       end
 
       it "resets the password" do
-        expect(user.reload.authenticate("new-password")).to be_true
+        expect(user.reload.authenticate("new-password")).to be_truthy
       end
 
       it "sets the success flash message" do
-        expect(flash[:success]).to be_present
+        expect(flash[:notice]).to be_present
       end
     end
 
@@ -49,7 +49,7 @@ describe PasswordResetsController do
       end
 
       it "renders password reset page" do
-        expect(response).to render_template :expired_token
+        expect(response).to redirect_to expired_token_path
       end
 
       it "sets the error flash message" do

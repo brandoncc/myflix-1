@@ -9,6 +9,10 @@ describe User do
   it { should have_many(:reviews).order("created_at DESC")}
   it { should ensure_length_of(:password).is_at_least(8) }
 
+  it_behaves_like "tokenable" do
+    let(:object) { Fabricate(:user) }
+  end
+
   describe "#queued_item?" do
     it 'returns true when the video is queued' do
       user = Fabricate(:user)
@@ -21,6 +25,15 @@ describe User do
       user = Fabricate(:user)
       video = Fabricate(:video)
       expect(user.queued_item?(video)).to be_falsey
+    end
+  end
+
+  describe "#follow" do
+    it "makes one user follow another user" do
+      user1 = Fabricate(:user)
+      user2 = Fabricate(:user)
+      user1.follow(user2)
+      expect(user1.leaders.first).to eq user2
     end
   end
 end

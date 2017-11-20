@@ -11,6 +11,7 @@ gem 'jquery-rails'
 gem 'pg'
 gem 'bootstrap_form'
 gem 'bcrypt-ruby', '3.1.2'
+gem 'sidekiq', '4.2'
 
 group :development do
   gem 'thin'
@@ -33,9 +34,11 @@ group :test do
   gem 'shoulda-matchers', '2.7.0'
   gem 'vcr', '2.9.3'
   gem 'capybara'
+  gem 'capybara-email'
 end
 
 group :production do
   gem 'rails_12factor'
+  gem 'unicorn'
 end
 
