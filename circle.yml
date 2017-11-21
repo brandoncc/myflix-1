@@ -5,6 +5,7 @@ deployment:
   production:
     branch: master
     commands:
+      - git fetch --all --unshallow
       - heroku maintenance:on --app walterflix
       - heroku pg:backups capture --app walterflix
       - git push git@heroku.com:walterflix.git $CIRCLE_SHA1:refs/heads/master
@@ -13,8 +14,8 @@ deployment:
   staging:
     branch: staging
     commands:
-      - heroku maintenance:on --app walterflix-staging
       - git fetch --all --unshallow
+      - heroku maintenance:on --app walterflix-staging
       - git push git@heroku.com:walterflix-staging.git $CIRCLE_SHA1:refs/heads/master
       - heroku run rake db:migrate --app walterflix-staging
       - heroku maintenance:off --app walterflix-staging
