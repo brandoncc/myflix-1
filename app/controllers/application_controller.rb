@@ -16,4 +16,8 @@ class ApplicationController < ActionController::Base
       redirect_to sign_in_path
     end
   end
+
+  def test
+    p 'to not be shallow clone'
+  end
 end
