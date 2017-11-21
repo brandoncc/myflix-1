@@ -1,0 +1,19 @@
+machine:
+  ruby:
+    version: 2.1.2
+deployment:
+  production:
+    branch: master
+    commands:
+      - heroku maintenance:on --app walterflix
+      - heroku pg:backups capture --app walterflix
+      - git push git@heroku.com:walterflix.git $CIRCLE_SHA1:refs/heads/master
+      - heroku run rake db:migrate --app walterflix
+      - heroku maintenance:off --app walterflix
+  staging:
+    branch: staging
+    commands:
+      - heroku maintenance:on --app walterflix-staging
+      - git push git@heroku.com:walterflix-staging.git $CIRCLE_SHA1:refs/heads/master
+      - heroku run rake db:migrate --app walterflix-staging
+      - heroku maintenance:off --app walterflix-staging
