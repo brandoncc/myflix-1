@@ -26,7 +26,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      # MyMailer.delay.register_success_mail(@user)
+      MyMailer.register_success_mail(@user)
       handle_invitation
       redirect_to sign_in_path
     else
