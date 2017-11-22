@@ -1,5 +1,5 @@
 class MyMailer < ActionMailer::Base
-  before_action :check_before_sending
+  # before_action :check_before_sending
 
   def register_success_mail(user)
     @user = user
