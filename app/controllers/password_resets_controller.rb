@@ -1,7 +1,7 @@
 class PasswordResetsController < ApplicationController
   def show
     @user = User.find_by(reset_token: params[:id])
-    if @user
+    if @user.present?
       @user.update_column("reset_token", nil)
     else
       redirect_to expired_token_path
