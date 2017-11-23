@@ -23,10 +23,10 @@ Myflix::Application.configure do
     :address        => ENV['MAILGUN_SMTP_SERVER'],
     :user_name      => ENV['MAILGUN_SMTP_LOGIN'],
     :password       => ENV['MAILGUN_SMTP_PASSWORD'],
-    :domain         => 'walterflix-staging.herokuapp.com',
+    :domain         => 'walterflix.herokuapp.com',
     :authentication => :plain,
   }
 
-  config.action_mailer.default_url_options = { :host => "walterflix.herokuapp.com" }
+  config.action_mailer.default_url_options = { :host => "walterflix-staging.herokuapp.com" }
   config.action_mailer.delivery_method = :smtp
 end
