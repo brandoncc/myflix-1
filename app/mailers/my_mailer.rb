@@ -19,7 +19,6 @@ class MyMailer < ActionMailer::Base
   private
 
   def check_before_sending
-    p Rails.env.staging?
     if Rails.env.staging?
       mail.perform_deliveries = false
     end
