@@ -1,23 +1,56 @@
 require 'spec_helper'
 
 describe Admin::VideosController, :type => :controller do
-  describe "new" do
+  describe "GET #new" do
     it_behaves_like "requires sign in" do
       let(:action) { get :new }
     end
 
-    context "as a regular authorized user" do
+    it_behaves_like "requires admin sign in" do
+      let(:action) { get :new }
+    end
+  end
+
+  describe "POST #create" do
+    it_behaves_like "requires sign in" do
+      let(:action) { post :create }
+    end
+    it_behaves_like "requires admin sign in" do
+      let(:action) { get :create }
+    end
+
+    context "with valid input" do
       before do
-        set_current_user
-        get :new
+        set_current_admin
+        video_attributes = Fabricate.attributes_for(:video)
+        post :create, video: video_attributes
       end
 
-      it "redirects regular user to home path" do
-        expect(response).to redirect_to home_path
+      it "redirects to new video path" do
+        expect(response).to redirect_to new_admin_video_path
       end
 
-      it "set flash error for regular user" do
-        expect(flash[:error]).to be_present
+      it "creates a new video" do
+        expect(Video.count).to eq(1)
+      end
+      it "sets flash notice message" do
+        expect(flash[:notice]).to be_present
+      end
+    end
+
+    context "with invalid input" do
+      before do
+        set_current_admin
+        video_attributes = Fabricate.attributes_for(:video, title: nil)
+        post :create, video: video_attributes
+      end
+
+      it "render new video path template" do
+        expect(response).to render_template :new
+      end
+
+      it "does not create a new video" do
+        expect(Video.count).to eq(0)
       end
     end
   end
