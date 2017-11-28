@@ -30,4 +30,8 @@ class User < ActiveRecord::Base
   def follow(user)
     following_relationships.create(leader: user)
   end
+
+  def admin?
+    !!admin
+  end
 end
