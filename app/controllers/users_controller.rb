@@ -26,12 +26,27 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      @amount = 990
+
+      customer = Stripe::Customer.create(
+        :email => params[:stripeEmail],
+        :source  => params[:stripeToken]
+      )
+
+      charge = Stripe::Charge.create(
+        :customer    => customer.id,
+        :amount      => @amount,
+        :currency    => 'usd'
+      )
+
       MyMailer.delay.register_success_mail(@user)
       handle_invitation
       redirect_to sign_in_path
     else
       render :new
     end
+  rescue Stripe::CardError => e
+    flash[:error] = e.message
   end
 
   private

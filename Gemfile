@@ -17,6 +17,7 @@ gem "sentry-raven"
 gem 'carrierwave', '~> 1.0'
 gem 'mini_magick'
 gem 'carrierwave-aws'
+gem 'stripe'
 
 group :development do
   gem 'thin'
@@ -32,6 +33,7 @@ group :development, :test do
   gem 'fabrication'
   gem 'faker'
   gem 'launchy'
+  gem 'dotenv-rails'
 end
 
 group :test do
