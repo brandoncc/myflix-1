@@ -25,7 +25,6 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    if @user.save
       @amount = 990
 
       customer = Stripe::Customer.create(
@@ -38,7 +37,7 @@ class UsersController < ApplicationController
         :amount      => @amount,
         :currency    => 'usd'
       )
-
+    if @user.save
       MyMailer.delay.register_success_mail(@user)
       handle_invitation
       redirect_to sign_in_path
@@ -47,6 +46,7 @@ class UsersController < ApplicationController
     end
   rescue Stripe::CardError => e
     flash[:error] = e.message
+    redirect_to register_path
   end
 
   private

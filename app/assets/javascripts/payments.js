@@ -1,27 +1,21 @@
 jQuery(function($) {
-  var handler = StripeCheckout.configure({
-    key: 'pk_test_DcUmDlGJDzj8ggwqZ4Z94aio',
-    image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
-    locale: 'auto',
-    token: function(token) {
-      // You can access the token ID with `token.id`.
-      // Get the token ID to your server-side code for use.
-    }
-  });
-
-  document.getElementById('customButton').addEventListener('click', function(e) {
-    // Open Checkout with further options:
-    handler.open({
-      name: 'Demo Site',
-      description: '2 widgets',
-      currency: 'jpy',
-      amount: 2000
-    });
-    e.preventDefault();
-  });
-
-  // Close Checkout on page navigation:
-  window.addEventListener('popstate', function() {
-    handler.close();
+  $('#payment-form').submit(function(event) {
+    var $form = $(this);
+    $form.find('button').prop('disabled', true);
+    Stripe.createToken($form, stripeResponseHandler);
+    return false;
   });
 });
+
+var stripeResponseHandler = function(status, response) {
+  var $form = $('#payment-form');
+
+  if (response.error) {
+    $form.find('.payment-errors').text(response.error.message);
+    $form.find('button').prop('disabled', false);
+  } else {
+    var token = response.id;
+    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+    $form.get(0).submit();
+  }
+};
