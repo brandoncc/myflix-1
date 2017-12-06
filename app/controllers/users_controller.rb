@@ -24,9 +24,9 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    @amount = 990
 
-      @amount = 990
-
+    if @user.save
       customer = Stripe::Customer.create(
         :email => params[:stripeEmail],
         :source  => params[:stripeToken]
@@ -37,7 +37,7 @@ class UsersController < ApplicationController
         :amount      => @amount,
         :currency    => 'usd'
       )
-    if @user.save
+
       MyMailer.delay.register_success_mail(@user)
       handle_invitation
       redirect_to sign_in_path
