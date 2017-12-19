@@ -1,0 +1,69 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.stripe.com/v1/charges
+    body:
+      encoding: US-ASCII
+      string: amount=999&currency=usd&card=tok_1BabnOFbDoFsZOtGVOjzQnmW
+    headers:
+      User-Agent:
+      - Stripe/v1 RubyBindings/3.8.0
+      Authorization:
+      - Bearer sk_test_R7CsF65YXLyWRgQfDF7X0QBq
+      Content-Type:
+      - application/x-www-form-urlencoded
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version":"3.8.0","lang":"ruby","lang_version":"2.1.2 p95 (2014-05-08)","platform":"x86_64-darwin13.0","engine":"ruby","publisher":"stripe","uname":"Darwin
+        Awlter 17.3.0 Darwin Kernel Version 17.3.0: Thu Nov  9 18:09:22 PST 2017;
+        root:xnu-4570.31.3~1/RELEASE_X86_64 x86_64","hostname":"Awlter"}'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 402
+      message: Payment Required
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 19 Dec 2017 03:29:36 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '201'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - X-Stripe-Privileged-Session-Required,stripe-manage-version,X-Stripe-External-Auth-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Request-Id:
+      - req_aqsUwwBFx9RwDj
+      Stripe-Version:
+      - '2017-08-15'
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "error": {
+            "message": "Your card was declined.",
+            "type": "card_error",
+            "code": "card_declined",
+            "decline_code": "generic_decline",
+            "charge": "ch_1BabnQFbDoFsZOtGf9e1JSTy"
+          }
+        }
+    http_version: 
+  recorded_at: Tue, 19 Dec 2017 03:29:36 GMT
+recorded_with: VCR 3.0.3
