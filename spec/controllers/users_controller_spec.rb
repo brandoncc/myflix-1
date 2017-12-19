@@ -48,8 +48,13 @@ describe UsersController, :type => :controller do
         ActionMailer::Base.deliveries.clear
       end
 
+      before do
+        charge = double("charge", successful?: true)
+        allow(StripeWrapper::Charge).to receive('create').and_return(charge)
+      end
+
       it "creates a new user" do
-        post :create, user: Fabricate.attributes_for(:user)
+        post :create, user: Fabricate.attributes_for(:user), stripeToken: '123123'
         expect(User.count).to eq 1
       end
 
@@ -74,9 +79,28 @@ describe UsersController, :type => :controller do
       end
     end
 
-    context "with invalid input" do
+    context "valid personal info and declined card" do
       before do
-        post :create, user: { email: Faker::Internet.email, password: Faker::Lorem.characters(10)}
+        charge = double("charge", successful?: false, error_message: 'declined card')
+        allow(StripeWrapper::Charge).to receive('create').and_return(charge)
+        post :create, user: Fabricate.attributes_for(:user), stripeToken: '123123'
+      end
+
+      it 'does not create a new user' do
+        expect(User.count).to eq 0
+      end
+
+      it 'renders :new template' do
+        expect(response).to render_template :new
+      end
+      it 'set the flash error message' do
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    context "with invalid personal info" do
+      before do
+        post :create, user: { email: Faker::Internet.email }
       end
 
       it 'does not create a new user' do
@@ -88,12 +112,20 @@ describe UsersController, :type => :controller do
       it 'sets new @user' do
         expect(assigns(:user)).to be_instance_of(User)
       end
+      it 'does not charge card' do
+        expect(StripeWrapper::Charge).not_to receive(:create)
+      end
     end
 
     context "sending email" do
       context "with valid input" do
         after do
           ActionMailer::Base.deliveries.clear
+        end
+
+        before do
+          charge = double("charge", successful?: true)
+          allow(StripeWrapper::Charge).to receive('create').and_return(charge)
         end
 
         it "sends email" do

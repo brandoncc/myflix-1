@@ -12,7 +12,7 @@ var stripeResponseHandler = function(status, response) {
 
   if (response.error) {
     $form.find('.payment-errors').text(response.error.message);
-    $form.find("button").prop('disabled', false);
+    $form.find('button').prop('disabled', false);
   } else {
     var token = response.id;
     $form.append($('<input type="hidden" name="stripeToken" />').val(token));

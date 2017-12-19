@@ -24,29 +24,21 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    @amount = 990
+    if @user.valid?
+      charge = StripeWrapper::Charge.create(amount: 999, card: params[:stripeToken])
 
-    if @user.save
-      customer = Stripe::Customer.create(
-        :email => params[:stripeEmail],
-        :source  => params[:stripeToken]
-      )
-
-      charge = Stripe::Charge.create(
-        :customer    => customer.id,
-        :amount      => @amount,
-        :currency    => 'usd'
-      )
-
-      MyMailer.delay.register_success_mail(@user)
-      handle_invitation
-      redirect_to sign_in_path
+      if charge.successful?
+        @user.save
+        handle_invitation
+        MyMailer.delay.register_success_mail(@user)
+        redirect_to sign_in_path
+      else
+        flash.now[:error] = charge.error_message
+        render :new
+      end
     else
       render :new
     end
-  rescue Stripe::CardError => e
-    flash[:error] = e.message
-    redirect_to register_path
   end
 
   private
