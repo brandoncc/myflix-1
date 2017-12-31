@@ -25,6 +25,7 @@ VCR.configure do |config|
 end
 
 Capybara.server_port = 52662
+Capybara.default_max_wait_time = 5
 Capybara.register_driver :selenium do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome)
 end

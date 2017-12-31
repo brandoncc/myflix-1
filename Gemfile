@@ -44,7 +44,6 @@ group :test do
   gem 'capybara'
   gem 'capybara-email'
   gem 'selenium-webdriver'
-  gem 'chromedriver-helper'
 end
 
 group :production, :staging do

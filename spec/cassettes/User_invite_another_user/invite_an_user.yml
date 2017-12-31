@@ -5,7 +5,7 @@ http_interactions:
     uri: https://api.stripe.com/v1/charges
     body:
       encoding: US-ASCII
-      string: amount=999&currency=usd&card=tok_1BZMEXFbDoFsZOtGKLC1FGzC
+      string: amount=999&currency=usd&card=tok_1BexNrFbDoFsZOtGa7UAtUs0
     headers:
       User-Agent:
       - Stripe/v1 RubyBindings/3.8.0
@@ -15,8 +15,8 @@ http_interactions:
       - application/x-www-form-urlencoded
       X-Stripe-Client-User-Agent:
       - '{"bindings_version":"3.8.0","lang":"ruby","lang_version":"2.1.2 p95 (2014-05-08)","platform":"x86_64-darwin13.0","engine":"ruby","publisher":"stripe","uname":"Darwin
-        Awlter.local 17.2.0 Darwin Kernel Version 17.2.0: Fri Sep 29 18:27:05 PDT
-        2017; root:xnu-4570.20.62~3/RELEASE_X86_64 x86_64","hostname":"Awlter.local"}'
+        Awlter.local 17.3.0 Darwin Kernel Version 17.3.0: Thu Nov  9 18:09:22 PST
+        2017; root:xnu-4570.31.3~1/RELEASE_X86_64 x86_64","hostname":"Awlter.local"}'
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -29,7 +29,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Fri, 15 Dec 2017 16:40:28 GMT
+      - Sun, 31 Dec 2017 03:21:13 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -49,7 +49,7 @@ http_interactions:
       Cache-Control:
       - no-cache, no-store
       Request-Id:
-      - req_GEEblmEqpe2cOm
+      - req_u5BYQ4GvuaOZoc
       Stripe-Version:
       - '2017-08-15'
       Strict-Transport-Security:
@@ -58,15 +58,15 @@ http_interactions:
       encoding: UTF-8
       string: |
         {
-          "id": "ch_1BZMEZFbDoFsZOtGCZYM2aAw",
+          "id": "ch_1BexNsFbDoFsZOtGwVqMAMhD",
           "object": "charge",
           "amount": 999,
           "amount_refunded": 0,
           "application": null,
           "application_fee": null,
-          "balance_transaction": "txn_1BZMEZFbDoFsZOtGWPhGqNd1",
+          "balance_transaction": "txn_1BexNsFbDoFsZOtG6C6KXc4g",
           "captured": true,
-          "created": 1513356027,
+          "created": 1514690472,
           "currency": "usd",
           "customer": null,
           "description": null,
@@ -96,12 +96,12 @@ http_interactions:
             "data": [],
             "has_more": false,
             "total_count": 0,
-            "url": "/v1/charges/ch_1BZMEZFbDoFsZOtGCZYM2aAw/refunds"
+            "url": "/v1/charges/ch_1BexNsFbDoFsZOtGwVqMAMhD/refunds"
           },
           "review": null,
           "shipping": null,
           "source": {
-            "id": "card_1BZMEXFbDoFsZOtGDIgqVquR",
+            "id": "card_1BexNqFbDoFsZOtGOtjY3sEO",
             "object": "card",
             "address_city": null,
             "address_country": null,
@@ -131,5 +131,5 @@ http_interactions:
           "transfer_group": null
         }
     http_version: 
-  recorded_at: Fri, 15 Dec 2017 16:40:28 GMT
+  recorded_at: Sun, 31 Dec 2017 03:21:13 GMT
 recorded_with: VCR 3.0.3
