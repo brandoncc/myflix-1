@@ -43,7 +43,7 @@ group :test do
   gem 'webmock'
   gem 'capybara'
   gem 'capybara-email'
-  gem 'selenium-webdriver'
+  gem 'selenium-webdriver', '2.46.2'
 end
 
 group :production, :staging do
