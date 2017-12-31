@@ -22,3 +22,9 @@ deployment:
       - git push git@heroku.com:walterflix-staging.git $CIRCLE_SHA1:refs/heads/master
       - heroku run rake db:migrate --app walterflix-staging
       - heroku maintenance:off --app walterflix-staging
+  test:
+    pre:
+      - wget http://chromedriver.storage.googleapis.com/2.22/chromedriver_linux32.zip
+      - unzip chromedriver_linux32.zip
+      - ./chromedriver --port=4444 --url-base=we/hub:
+          background: true
