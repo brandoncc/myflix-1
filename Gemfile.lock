@@ -277,7 +277,7 @@ DEPENDENCIES
   rails_12factor
   rspec-rails (= 2.99)
   sass-rails
-  selenium-webdriver (= 2.46.2)
+  selenium-webdriver
   sentry-raven
   shoulda-matchers (= 2.7.0)
   sidekiq (= 4.2)
