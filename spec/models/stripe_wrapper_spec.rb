@@ -35,7 +35,7 @@ describe StripeWrapper do
           expect(charge).to_not be_successful
         end
         it "sets the error message" do
-          expect(charge.error_message).to eq('Your card has expired.')
+          expect(charge.error_message).to eq('Your card was declined.')
         end
       end
     end
