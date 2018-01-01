@@ -25,7 +25,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.valid?
-      charge = StripeWrapper::Charge.create(amount: 999, card: params[:stripeToken])
+      charge = StripeWrapper::Charge.create(amount: 999, source: params[:stripeToken])
 
       if charge.successful?
         @user.save
