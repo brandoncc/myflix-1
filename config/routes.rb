@@ -39,5 +39,7 @@ Myflix::Application.routes.draw do
 
   resources :invitations, only: [:new, :create]
 
+  resources :charges, only: [:new, :create]
+
   get 'ui(/:action)', controller: 'ui'
 end
